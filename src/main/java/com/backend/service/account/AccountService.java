@@ -25,6 +25,10 @@ public class AccountService {
 		return accountRepository.findById(id).orElse(null);
 	}
 
+	public List<Resume> findAllResumesById(Long id) {
+		return accountRepository.findById(id).get().getResumes();
+	}
+	
 	public void deleteById(Long id) {
 		accountRepository.deleteById(id);
 	}
@@ -43,6 +47,7 @@ public class AccountService {
 		if (account != null) {
 			Resume resume = account.getResumes().stream().filter(r -> r.getId().equals(resumeId)).findFirst()
 					.orElse(null);
+			System.out.print(account.getResumes().size());
 			if (resume != null) {
 				account.removeResume(resume);
 				return save(account);

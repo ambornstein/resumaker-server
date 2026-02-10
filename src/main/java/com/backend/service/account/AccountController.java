@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.service.resume.Resume;
+import com.backend.service.resume.ResumeService;
+
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +29,9 @@ public class AccountController {
 	@Autowired
 	private AccountService accountService;
 	
-
+	@Autowired
+	private ResumeService resumeService;
+	
 	@GetMapping
 	public ResponseEntity<Object> getAllAccounts() {
 		try {
@@ -37,6 +42,18 @@ public class AccountController {
 			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@PostMapping
+	public ResponseEntity<Object> createAccount(@RequestBody Account account) {
+		try {
+			Account savedAccount = accountService.save(account);
+			return new ResponseEntity<Object>(savedAccount, HttpStatus.OK);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Object> getAccountById(@PathVariable Long id) {
@@ -53,10 +70,26 @@ public class AccountController {
 		}
 	}
 	
+	@GetMapping("/{accountId}/resumes")
+	public ResponseEntity<Object> getResumes(@PathVariable Long accountId) {
+		try {
+			List<Resume> resumes = accountService.findAllResumesById(accountId);
+			if (resumes != null) {
+				return new ResponseEntity<Object>(resumes, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@PostMapping("/{accountId}/resumes")
 	public ResponseEntity<Object> addResume(@PathVariable Long accountId, @RequestBody Resume resume) {
 		try {
-			Account account = accountService.addResume(accountId, resume);
+			Resume savedResume = resumeService.save(resume);
+			Account account = accountService.addResume(accountId, savedResume);
 			if (account != null) {
 				return new ResponseEntity<Object>(account, HttpStatus.OK);
 			} else {
@@ -68,7 +101,7 @@ public class AccountController {
 		}
 	}
 	
-	@DeleteMapping("/{accountId}/resumes/{resumeID}")
+	@DeleteMapping("/{accountId}/resumes/{resumeId}")
 	public ResponseEntity<Object> removeResume(@PathVariable Long accountId, @PathVariable Long resumeId) {
 		try {
 			Account account = accountService.removeResume(accountId, resumeId);

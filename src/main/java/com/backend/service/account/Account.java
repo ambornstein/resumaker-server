@@ -1,8 +1,10 @@
 package com.backend.service.account;
 
+import java.util.List;
 import java.util.Set;
 
 import com.backend.service.resume.Resume;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -42,17 +44,20 @@ public class Account {
 	}
 
 	@OneToMany(mappedBy = "account")
-	private Set<Resume> resumes;
+	@JsonManagedReference
+	private List<Resume> resumes;
 
 	public void addResume(Resume resume) {
 		resumes.add(resume);
+		resume.setAccount(this);
 	}
 	
 	public void removeResume(Resume resume) {
 		resumes.remove(resume);
+		resume.setAccount(null);
 	}
-	
-	public Set<Resume> getResumes() {
+
+	public List<Resume> getResumes() {
 		return resumes;
 	}
 	

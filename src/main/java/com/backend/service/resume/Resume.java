@@ -4,8 +4,11 @@ import java.util.Set;
 
 import com.backend.service.account.Account;
 import com.backend.service.resume.components.WorkPosition;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -42,8 +45,17 @@ public class Resume {
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "account_id")
+	@JsonBackReference
+	@JoinColumn(name="account_id")
 	private Account account;
+	
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+	
+	public Account getAccount() {
+		return account;
+	}
 
 	@ManyToMany
 	@JoinTable(name = "work_positions", joinColumns = @JoinColumn(name = "resume_id"), inverseJoinColumns = @JoinColumn(name = "work_id"))
