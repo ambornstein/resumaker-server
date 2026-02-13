@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.backend.service.resume.Resume;
+import com.backend.service.resume.components.education.Education;
+import com.backend.service.resume.components.experience.WorkExperience;
+import com.backend.service.resume.components.project.Project;
 
 @Service
 public class AccountService {
@@ -47,11 +50,37 @@ public class AccountService {
 		if (account != null) {
 			Resume resume = account.getResumes().stream().filter(r -> r.getId().equals(resumeId)).findFirst()
 					.orElse(null);
-			System.out.print(account.getResumes().size());
 			if (resume != null) {
 				account.removeResume(resume);
 				return save(account);
 			}
+		}
+		return null;
+	}
+	
+	public Account addWorkExperience(Long accountId, WorkExperience work) {
+		Account account = findById(accountId);
+		if (account != null) {
+			account.addWorkExperience(work);
+			return save(account);
+		}
+		return null;
+	}
+	
+	public Account addEducation(Long accountId, Education education) {
+		Account account = findById(accountId);
+		if (account != null) {
+			account.addEducation(education);
+			return save(account);
+		}
+		return null;
+	}
+	
+	public Account addProject(Long accountId, Project work) {
+		Account account = findById(accountId);
+		if (account != null) {
+			account.addProject(work);
+			return save(account);
 		}
 		return null;
 	}

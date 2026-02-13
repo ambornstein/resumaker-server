@@ -105,6 +105,7 @@ public class AccountController {
 	public ResponseEntity<Object> removeResume(@PathVariable Long accountId, @PathVariable Long resumeId) {
 		try {
 			Account account = accountService.removeResume(accountId, resumeId);
+			resumeService.deleteById(resumeId);
 			if (account != null) {
 				return new ResponseEntity<Object>(account, HttpStatus.OK);
 			} else {
