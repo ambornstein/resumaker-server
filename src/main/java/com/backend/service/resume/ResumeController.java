@@ -18,7 +18,6 @@ import com.backend.service.resume.components.education.Education;
 import com.backend.service.resume.components.education.EducationRepository;
 import com.backend.service.resume.components.experience.WorkExperience;
 import com.backend.service.resume.components.experience.WorkExperienceRepository;
-import com.backend.service.resume.components.project.Project;
 import com.backend.service.resume.components.project.ProjectRepository;
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -30,9 +29,6 @@ public class ResumeController {
 
 	@Autowired
 	private ResumeService resumeService;
-
-	@Autowired
-	private AccountService accountService;
 	
 	@Autowired
 	ProjectRepository projectRepository;
@@ -67,7 +63,6 @@ public class ResumeController {
 			logger.error(ex.getMessage(), ex);
 			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
 		}
-
 	}
 
 	@PostMapping
@@ -79,119 +74,5 @@ public class ResumeController {
 			logger.error(ex.getMessage(), ex);
 			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
 		}
-	}
-
-	@PostMapping("/{resumeId}/projects")
-	public ResponseEntity<Object> createProject(@PathVariable Long resumeId, @RequestBody Project project) {
-		try {
-			Project savedProject = projectRepository.save(project);
-			Resume resume = resumeService.addProject(resumeId, savedProject);
-			accountService.addProject(resume.getAccount().getId(), savedProject);
-			
-			return new ResponseEntity<Object>(resume, HttpStatus.OK);
-		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex);
-			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-		}
-	}
-
-	@PostMapping("/{resumeId}/projects/{projectId}")
-	public ResponseEntity<Object> addProject(@PathVariable Long resumeId, @PathVariable Long projectId) {
-		try {
-			Project currentProject = projectRepository.findById(projectId).orElse(null);
-			Resume resume = resumeService.addProject(resumeId, currentProject);
-			return new ResponseEntity<Object>(resume, HttpStatus.OK);
-		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex);
-			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-		}
-	}
-	
-	@DeleteMapping("/{resumeId}/projects/{projectId}")
-	public ResponseEntity<Object> removeProject(@PathVariable Long resumeId, @PathVariable Long projectId) {
-		try {
-			Resume resume = resumeService.removeProject(resumeId, projectId);
-			return new ResponseEntity<Object>(resume, HttpStatus.OK);
-		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex);
-			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-		}
-	}
-	
-
-	@PostMapping("/{resumeId}/experience")
-	public ResponseEntity<Object> createExperience(@PathVariable Long resumeId,
-			@RequestBody WorkExperience experience) {
-		try {
-			WorkExperience savedExperience = workExperienceRepository.save(experience);
-			Resume resume = resumeService.addExperience(resumeId, savedExperience);
-			accountService.addWorkExperience(resume.getAccount().getId(), savedExperience);
-			
-			return new ResponseEntity<Object>(resume, HttpStatus.OK);
-		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex);
-			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-		}
-	}
-
-	@PostMapping("/{resumeId}/experience/{experienceId}")
-	public ResponseEntity<Object> addExperience(@PathVariable Long resumeId, @PathVariable Long experienceId) {
-		try {
-			WorkExperience currentExperience = workExperienceRepository.findById(experienceId).orElse(null);
-			Resume resume = resumeService.addExperience(resumeId, currentExperience);
-			return new ResponseEntity<Object>(resume, HttpStatus.OK);
-		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex);
-			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-		}
-	}
-	
-	@DeleteMapping("/{resumeId}/experience/{experienceId}")
-	public ResponseEntity<Object> removeExperience(@PathVariable Long resumeId, @PathVariable Long experienceId) {
-		try {
-			Resume resume = resumeService.removeExperience(resumeId, experienceId);
-			return new ResponseEntity<Object>(resume, HttpStatus.OK);
-		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex);
-			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-		}
-	}
-
-	@PostMapping("/{resumeId}/education")
-	public ResponseEntity<Object> createEducation(@PathVariable Long resumeId, @RequestBody Education education) {
-		try {
-			Education savedEducation = educationRepository.save(education);
-			Resume resume = resumeService.addEducation(resumeId, savedEducation);
-			accountService.addEducation(resume.getAccount().getId(), savedEducation);
-			
-			return new ResponseEntity<Object>(resume, HttpStatus.OK);
-		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex);
-			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-		}
-	}
-	
-	@PostMapping("/{resumeId}/education/{educationId}")
-	public ResponseEntity<Object> addEducation(@PathVariable Long resumeId, @PathVariable Long educationId) {
-		try {
-			Education currentEducation = educationRepository.findById(educationId).orElse(null);
-			Resume resume = resumeService.addEducation(resumeId, currentEducation);
-			return new ResponseEntity<Object>(resume, HttpStatus.OK);
-		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex);
-			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-		}
-	}
-	
-	@DeleteMapping("/{resumeId}/education/{educationId}")
-	public ResponseEntity<Object> removeEducation(@PathVariable Long resumeId, @PathVariable Long educationId) {
-		try {
-			Resume resume = resumeService.removeEducation(resumeId, educationId);
-			return new ResponseEntity<Object>(resume, HttpStatus.OK);
-		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex);
-			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-		}
-	}
-	
+	}	
 }
