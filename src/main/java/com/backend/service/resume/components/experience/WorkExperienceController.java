@@ -41,6 +41,34 @@ public class WorkExperienceController {
 			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@PutMapping("/experience/{experienceId}")
+	public ResponseEntity<Object> updateExperience(@PathVariable Long experienceId, @RequestBody WorkExperience experience) {
+		try {
+			WorkExperience updatedExperience = experienceService.updateById(experienceId, experience);
+			
+			return new ResponseEntity<Object>(updatedExperience, HttpStatus.OK);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@DeleteMapping("/accounts/{accountId}/experience/{experienceId}")
+	public ResponseEntity<Object> deleteExperience(@PathVariable Long accountId, @PathVariable Long experienceId) {
+		try {
+			accountService.removeWorkExperince(accountId, experienceId);
+			if (experienceService.deleteById(experienceId)) {
+				return new ResponseEntity<Object>(HttpStatus.OK);
+			}
+			else {
+				return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
+			}
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+		}
+	}
 
 	@PostMapping("/resumes/{resumeId}/experience/{experienceId}")
 	public ResponseEntity<Object> addExperience(@PathVariable Long resumeId, @PathVariable Long experienceId) {
@@ -59,33 +87,6 @@ public class WorkExperienceController {
 		try {
 			WorkExperience experience = experienceService.removeFromResume(resumeId, experienceId);
 			return new ResponseEntity<Object>(experience, HttpStatus.OK);
-		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex);
-			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-		}
-	}
-	
-	@PutMapping("/experience/{experienceId}")
-	public ResponseEntity<Object> updateExperience(@PathVariable Long experienceId, @RequestBody WorkExperience experience) {
-		try {
-			WorkExperience updatedExperience = experienceService.updateById(experienceId, experience);
-			
-			return new ResponseEntity<Object>(updatedExperience, HttpStatus.OK);
-		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex);
-			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-		}
-	}
-	
-	@DeleteMapping("/experience/{experienceId}")
-	public ResponseEntity<Object> deleteExperience(@PathVariable Long experienceId) {
-		try {
-			if (experienceService.deleteById(experienceId)) {
-				return new ResponseEntity<Object>(HttpStatus.OK);
-			}
-			else {
-				return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
-			}
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);

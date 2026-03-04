@@ -41,6 +41,35 @@ public class EducationController {
 			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@PutMapping("/education/{educationId}")
+	public ResponseEntity<Object> updateEducation(@PathVariable Long educationId, @RequestBody Education education) {
+		try {
+			Education updatedEducation = educationService.updateById(educationId, education);
+			
+			return new ResponseEntity<Object>(updatedEducation, HttpStatus.OK);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@DeleteMapping("/accounts/{accountId}/education/{educationId}")
+	public ResponseEntity<Object> deleteEducation(@PathVariable Long accountId, @PathVariable Long educationId) {
+		try {
+			accountService.removeEducation(accountId, educationId);
+			if (educationService.deleteById(educationId)) {
+				return new ResponseEntity<Object>(HttpStatus.OK);
+			}
+			else {
+				return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
+			}
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 
 	@PostMapping("/resumes/{resumeId}/education/{educationId}")
 	public ResponseEntity<Object> addEducation(@PathVariable Long resumeId, @PathVariable Long educationId) {
@@ -65,30 +94,5 @@ public class EducationController {
 		}
 	}
 	
-	@PutMapping("/education/{educationId}")
-	public ResponseEntity<Object> updateEducation(@PathVariable Long educationId, @RequestBody Education education) {
-		try {
-			Education updatedEducation = educationService.updateById(educationId, education);
-			
-			return new ResponseEntity<Object>(updatedEducation, HttpStatus.OK);
-		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex);
-			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-		}
-	}
 	
-	@DeleteMapping("/education/{educationId}")
-	public ResponseEntity<Object> deleteEducation(@PathVariable Long educationId) {
-		try {
-			if (educationService.deleteById(educationId)) {
-				return new ResponseEntity<Object>(HttpStatus.OK);
-			}
-			else {
-				return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
-			}
-		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex);
-			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-		}
-	}
 }

@@ -67,6 +67,19 @@ public class AccountService {
 		return null;
 	}
 	
+	public Account removeWorkExperince(Long accountId, Long workId) {
+		Account account = findById(accountId);
+		if (account != null) {
+			WorkExperience work = account.getWorkExperiences().stream().filter(r -> r.getId().equals(workId)).findFirst()
+					.orElse(null);
+			if (work != null) {
+				account.removeWorkExperience(work);
+				return save(account);
+			}
+		}
+		return null;
+	}
+	
 	public Account addEducation(Long accountId, Education education) {
 		Account account = findById(accountId);
 		if (account != null) {
@@ -76,11 +89,37 @@ public class AccountService {
 		return null;
 	}
 	
+	public Account removeEducation(Long accountId, Long educationId) {
+		Account account = findById(accountId);
+		if (account != null) {
+			Education education = account.getEducationEntries().stream().filter(r -> r.getId().equals(educationId)).findFirst()
+					.orElse(null);
+			if (education != null) {
+				account.removeEducation(education);
+				return save(account);
+			}
+		}
+		return null;
+	}
+	
 	public Account addProject(Long accountId, Project work) {
 		Account account = findById(accountId);
 		if (account != null) {
 			account.addProject(work);
 			return save(account);
+		}
+		return null;
+	}
+	
+	public Account removeProject(Long accountId, Long projectId) {
+		Account account = findById(accountId);
+		if (account != null) {
+			Project project = account.getProjects().stream().filter(r -> r.getId().equals(projectId)).findFirst()
+					.orElse(null);
+			if (project != null) {
+				account.removeProject(project);
+				return save(account);
+			}
 		}
 		return null;
 	}

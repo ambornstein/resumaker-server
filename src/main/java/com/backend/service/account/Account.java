@@ -9,12 +9,12 @@ import com.backend.service.resume.components.experience.WorkExperience;
 import com.backend.service.resume.components.project.Project;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -104,8 +104,8 @@ public class Account {
 		projects.add(project);
 	}
 	
-	public void removeProject(Education project) {
-		educationEntries.remove(project);
+	public void removeProject(Project project) {
+		projects.remove(project);
 	}
 	
 	public Set<Project> getProjects() {

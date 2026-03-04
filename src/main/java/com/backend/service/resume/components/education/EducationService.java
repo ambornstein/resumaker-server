@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.backend.service.resume.Resume;
 import com.backend.service.resume.ResumeService;
 import com.backend.service.resume.components.IEntryService;
+import com.backend.service.resume.components.experience.WorkExperience;
 
 @Service
 public class EducationService implements IEntryService<Education> {
@@ -22,21 +24,22 @@ public class EducationService implements IEntryService<Education> {
 
 	public Education assignToResume(Long resumeId, Long educationId) {
 		Education education = findById(educationId);
-		if (education != null) {
-			resumeService.addEducation(resumeId, education);
-			return education;
+		Resume resume = resumeService.findById(resumeId);
+		if (education != null && resume != null) {
+			education.resumes.add(resume);
+			return save(education);
 		}
 		return null;
 	}
 
 	public Education removeFromResume(Long resumeId, Long educationId) {
 		Education education = findById(educationId);
-		if (education != null) {
-			resumeService.removeEducation(resumeId, educationId);
-			return education;
+		Resume resume = resumeService.findById(resumeId);
+		if (education != null && resume != null) {
+			education.resumes.remove(resume);
+			return save(education);
 		}
 		return null;
-		
 	}
 
 	public Education updateById(Long id, Education education) {

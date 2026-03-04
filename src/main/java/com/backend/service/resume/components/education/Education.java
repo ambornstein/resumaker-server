@@ -1,9 +1,17 @@
 package com.backend.service.resume.components.education;
 
+import java.util.Set;
+
+import com.backend.service.resume.Resume;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Transient;
 
 @Entity
@@ -22,6 +30,11 @@ public class Education {
 	
 	@Transient
 	boolean current;
+	
+	@ManyToMany(cascade = CascadeType.MERGE)
+	@JoinTable(name = "education_entry", joinColumns= @JoinColumn(name = "resume_id"), inverseJoinColumns = @JoinColumn(name = "education_id"))
+	Set<Resume> resumes;
+	
 	
 	public Long getId() {
 		return id;

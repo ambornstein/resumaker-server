@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.backend.service.resume.Resume;
 import com.backend.service.resume.ResumeService;
 import com.backend.service.resume.components.IEntryService;
 
@@ -22,18 +23,20 @@ public class ProjectService implements IEntryService<Project> {
 
 	public Project assignToResume(Long resumeId, Long projectId) {
 		Project project = findById(projectId);
-		if (project != null) {
-			resumeService.addProject(resumeId, project);
-			return project;
+		Resume resume = resumeService.findById(resumeId);
+		if (project != null && resume != null) {
+			project.resumes.add(resume);
+			return save(project);
 		}
 		return null;
 	}
 
 	public Project removeFromResume(Long resumeId, Long projectId) {
 		Project project = findById(projectId);
-		if (project != null) {
-			resumeService.removeProject(resumeId, projectId);
-			return project;
+		Resume resume = resumeService.findById(resumeId);
+		if (project != null && resume != null) {
+			project.resumes.remove(resume);
+			return save(project);
 		}
 		return null;
 		

@@ -9,6 +9,7 @@ import com.backend.service.resume.components.project.Project;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -27,16 +28,13 @@ public class Resume {
 
 	private String label;
 
-	@ManyToMany
-	@JoinTable(name = "work_entry", joinColumns = @JoinColumn(name = "resume_id"), inverseJoinColumns = @JoinColumn(name = "work_id"))
+	@ManyToMany(mappedBy = "resumes")
 	private Set<WorkExperience> workHistory;
 	
-	@ManyToMany
-	@JoinTable(name = "education_entry", joinColumns= @JoinColumn(name = "resume_id"), inverseJoinColumns = @JoinColumn(name = "education_id"))
+	@ManyToMany(mappedBy = "resumes")
 	private Set<Education> educationHistory;
 
-	@ManyToMany
-	@JoinTable(name = "project_entry", joinColumns= @JoinColumn(name = "resume_id"), inverseJoinColumns = @JoinColumn(name = "project_id"))
+	@ManyToMany(mappedBy = "resumes")
 	private Set<Project> projects;
 	
 	@ManyToOne

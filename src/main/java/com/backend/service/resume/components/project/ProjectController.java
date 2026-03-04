@@ -41,7 +41,36 @@ public class ProjectController {
 			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
 		}
 	}
-
+	
+	@PutMapping("/projects/{projectId}")
+	public ResponseEntity<Object> updateProject(@PathVariable Long projectId, @RequestBody Project project) {
+		try {
+			Project updatedProject = projectService.updateById(projectId, project);
+			
+			return new ResponseEntity<Object>(updatedProject, HttpStatus.OK);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@DeleteMapping("/accounts/{accountId}/projects/{projectId}")
+	public ResponseEntity<Object> deleteProject(@PathVariable Long accountId, @PathVariable Long projectId) {
+		try {
+			accountService.removeProject(accountId, projectId);
+			if (projectService.deleteById(projectId)) {
+			
+				return new ResponseEntity<Object>(HttpStatus.OK);
+			}
+			else {
+				return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
+			}
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@PostMapping("/resumes/{resumeId}/projects/{projectId}")
 	public ResponseEntity<Object> addProject(@PathVariable Long resumeId, @PathVariable Long projectId) {
 		try {
@@ -59,34 +88,6 @@ public class ProjectController {
 		try {
 			Project project = projectService.removeFromResume(resumeId, projectId);
 			return new ResponseEntity<Object>(project, HttpStatus.OK);
-		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex);
-			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-		}
-	}
-	
-	@PutMapping("/projects/{projectId}")
-	public ResponseEntity<Object> updateProject(@PathVariable Long projectId, @RequestBody Project project) {
-		try {
-			Project updatedProject = projectService.updateById(projectId, project);
-			
-			return new ResponseEntity<Object>(updatedProject, HttpStatus.OK);
-		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex);
-			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-		}
-	}
-	
-	@DeleteMapping("/projects/{projectId}")
-	public ResponseEntity<Object> deleteProject(@PathVariable Long projectId) {
-		try {
-			if (projectService.deleteById(projectId)) {
-			
-				return new ResponseEntity<Object>(HttpStatus.OK);
-			}
-			else {
-				return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
-			}
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
