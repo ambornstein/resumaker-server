@@ -8,38 +8,15 @@ import org.springframework.stereotype.Service;
 import com.backend.service.resume.Resume;
 import com.backend.service.resume.ResumeService;
 import com.backend.service.resume.components.IEntryService;
+import com.backend.service.resume.components.experience.WorkExperience;
 
 @Service
-public class ProjectService implements IEntryService<Project> {
+public class ProjectService {
 	@Autowired
 	private ProjectRepository projectRepository;
 
-	@Autowired
-	private ResumeService resumeService;
-
 	public Project save(Project project) {
 		return projectRepository.save(project);
-	}
-
-	public Project assignToResume(Long resumeId, Long projectId) {
-		Project project = findById(projectId);
-		Resume resume = resumeService.findById(resumeId);
-		if (project != null && resume != null) {
-			project.resumes.add(resume);
-			return save(project);
-		}
-		return null;
-	}
-
-	public Project removeFromResume(Long resumeId, Long projectId) {
-		Project project = findById(projectId);
-		Resume resume = resumeService.findById(resumeId);
-		if (project != null && resume != null) {
-			project.resumes.remove(resume);
-			return save(project);
-		}
-		return null;
-		
 	}
 
 	public Project updateById(Long id, Project project) {
@@ -53,6 +30,17 @@ public class ProjectService implements IEntryService<Project> {
 		}
 		return null;
 	}
+	
+	public Project addToResume(Resume resume, Project project) {
+		project.resumes.add(resume);
+		return save(project);
+	}
+	
+	public Project removeFromResume(Resume resume, Project project) {
+		project.resumes.remove(resume);
+		return save(project);
+	}
+	
 
 	public List<Project> findAll() {
 		return (List<Project>) projectRepository.findAll();

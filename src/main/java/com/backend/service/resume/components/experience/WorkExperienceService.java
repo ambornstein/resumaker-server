@@ -11,36 +11,13 @@ import com.backend.service.resume.components.IEntryService;
 import com.backend.service.resume.components.project.Project;
 
 @Service
-public class WorkExperienceService implements IEntryService<WorkExperience>{
+public class WorkExperienceService {
 
 	@Autowired
 	private WorkExperienceRepository workExperienceRepository;
 
-	@Autowired
-	private ResumeService resumeService;
-
 	public WorkExperience save(WorkExperience project) {
 		return workExperienceRepository.save(project);
-	}
-
-	public WorkExperience assignToResume(Long resumeId, Long experienceId) {
-		WorkExperience work = findById(experienceId);
-		Resume resume = resumeService.findById(resumeId);
-		if (work != null && resume != null) {
-			work.resumes.add(resume);
-			return save(work);
-		}
-		return null;
-	}
-
-	public WorkExperience removeFromResume(Long resumeId, Long experienceId) {
-		WorkExperience work = findById(experienceId);
-		Resume resume = resumeService.findById(resumeId);
-		if (work != null && resume != null) {
-			work.resumes.remove(resume);
-			return save(work);
-		}
-		return null;
 	}
 
 	public WorkExperience updateById(Long id, WorkExperience experience) {
@@ -57,6 +34,17 @@ public class WorkExperienceService implements IEntryService<WorkExperience>{
 		return null;
 	}
 
+	public WorkExperience addToResume(Resume resume, WorkExperience experience) {
+		experience.resumes.add(resume);
+		return save(experience);
+	}
+	
+	public WorkExperience removeFromResume(Resume resume, WorkExperience experience) {
+		experience.resumes.remove(resume);
+		return save(experience);
+	}
+	
+	
 	public List<WorkExperience> findAll() {
 		return (List<WorkExperience>) workExperienceRepository.findAll();
 	}

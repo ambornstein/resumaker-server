@@ -1,6 +1,7 @@
 package com.backend.service.account;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,6 +59,14 @@ public class AccountService {
 		return null;
 	}
 	
+	public Set<Resume> getResumesById(Long accountId) {
+		Account account = findById(accountId);
+		if (account != null) {
+			return (Set<Resume>) account.getResumes();
+		}
+		return null;
+	}
+	
 	public Account addWorkExperience(Long accountId, WorkExperience work) {
 		Account account = findById(accountId);
 		if (account != null) {
@@ -76,6 +85,14 @@ public class AccountService {
 				account.removeWorkExperience(work);
 				return save(account);
 			}
+		}
+		return null;
+	}
+	
+	public Set<WorkExperience> getWorkExperiencesById(Long accountId) {
+		Account account = findById(accountId);
+		if (account != null) {
+			return (Set<WorkExperience>) account.getWorkExperiences();
 		}
 		return null;
 	}
@@ -102,6 +119,14 @@ public class AccountService {
 		return null;
 	}
 	
+	public Set<Education> getEducationById(Long accountId) {
+		Account account = findById(accountId);
+		if (account != null) {
+			return (Set<Education>) account.getEducationEntries();
+		}
+		return null;
+	}
+	
 	public Account addProject(Long accountId, Project work) {
 		Account account = findById(accountId);
 		if (account != null) {
@@ -120,6 +145,14 @@ public class AccountService {
 				account.removeProject(project);
 				return save(account);
 			}
+		}
+		return null;
+	}
+	
+	public Set<Project> getProjectsById(Long accountId) {
+		Account account = findById(accountId);
+		if (account != null) {
+			return (Set<Project>) account.getProjects();
 		}
 		return null;
 	}

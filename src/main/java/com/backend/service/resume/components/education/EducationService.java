@@ -1,45 +1,19 @@
 package com.backend.service.resume.components.education;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.backend.service.resume.Resume;
-import com.backend.service.resume.ResumeService;
-import com.backend.service.resume.components.IEntryService;
-import com.backend.service.resume.components.experience.WorkExperience;
+import com.backend.service.resume.components.project.Project;
 
 @Service
-public class EducationService implements IEntryService<Education> {
+public class EducationService {
 	@Autowired
 	private EducationRepository educationRepository;
 
-	@Autowired
-	private ResumeService resumeService;
-
 	public Education save(Education education) {
 		return educationRepository.save(education);
-	}
-
-	public Education assignToResume(Long resumeId, Long educationId) {
-		Education education = findById(educationId);
-		Resume resume = resumeService.findById(resumeId);
-		if (education != null && resume != null) {
-			education.resumes.add(resume);
-			return save(education);
-		}
-		return null;
-	}
-
-	public Education removeFromResume(Long resumeId, Long educationId) {
-		Education education = findById(educationId);
-		Resume resume = resumeService.findById(resumeId);
-		if (education != null && resume != null) {
-			education.resumes.remove(resume);
-			return save(education);
-		}
-		return null;
 	}
 
 	public Education updateById(Long id, Education education) {
@@ -54,6 +28,16 @@ public class EducationService implements IEntryService<Education> {
 			return save(existingEducation);
 		}
 		return null;
+	}
+	
+	public Education addToResume(Resume resume, Education education) {
+		education.resumes.add(resume);
+		return save(education);
+	}
+	
+	public Education removeFromResume(Resume resume, Education education) {
+		education.resumes.remove(resume);
+		return save(education);
 	}
 
 	public List<Education> findAll() {

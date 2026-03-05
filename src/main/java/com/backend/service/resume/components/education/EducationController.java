@@ -70,29 +70,4 @@ public class EducationController {
 		}
 	}
 	
-
-	@PostMapping("/resumes/{resumeId}/education/{educationId}")
-	public ResponseEntity<Object> addEducation(@PathVariable Long resumeId, @PathVariable Long educationId) {
-		try {
-			Education education = educationService.assignToResume(resumeId, educationId);
-			
-			return new ResponseEntity<Object>(education, HttpStatus.OK);
-		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex);
-			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-		}
-	}
-	
-	@DeleteMapping("/resumes/{resumeId}/education/{educationId}")
-	public ResponseEntity<Object> removeEducation(@PathVariable Long resumeId, @PathVariable Long educationId) {
-		try {
-			Education education = educationService.removeFromResume(resumeId, educationId);
-			return new ResponseEntity<Object>(education, HttpStatus.OK);
-		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex);
-			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-		}
-	}
-	
-	
 }

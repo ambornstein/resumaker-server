@@ -1,5 +1,7 @@
 package com.backend.service.resume;
 
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.backend.service.account.AccountService;
 import com.backend.service.resume.components.education.Education;
@@ -75,4 +78,40 @@ public class ResumeController {
 			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
 		}
 	}	
+	
+	@PostMapping("/{resumeId}/education")
+	public ResponseEntity<Object> updateEducation(@PathVariable Long resumeId, @RequestParam Set<Long> ids) {
+		try {
+			Resume resume = resumeService.updateLinkedEducation(resumeId, ids);
+			
+			return new ResponseEntity<Object>(resume, HttpStatus.OK);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/{resumeId}/experience")
+	public ResponseEntity<Object> updateExperience(@PathVariable Long resumeId, @RequestParam Set<Long> ids) {
+		try {
+			Resume resume = resumeService.updateLinkedWorkExperience(resumeId, ids);
+			
+			return new ResponseEntity<Object>(resume, HttpStatus.OK);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/{resumeId}/projects")
+	public ResponseEntity<Object> updateProjects(@PathVariable Long resumeId, @RequestParam Set<Long> ids) {
+		try {
+			Resume resume = resumeService.updateLinkedProjects(resumeId, ids);
+			
+			return new ResponseEntity<Object>(resume, HttpStatus.OK);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+		}
+	}
 }

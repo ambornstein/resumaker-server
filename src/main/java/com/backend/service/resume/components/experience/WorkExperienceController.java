@@ -69,27 +69,4 @@ public class WorkExperienceController {
 			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
 		}
 	}
-
-	@PostMapping("/resumes/{resumeId}/experience/{experienceId}")
-	public ResponseEntity<Object> addExperience(@PathVariable Long resumeId, @PathVariable Long experienceId) {
-		try {
-			WorkExperience experience = experienceService.assignToResume(resumeId, experienceId);
-			
-			return new ResponseEntity<Object>(experience, HttpStatus.OK);
-		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex);
-			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-		}
-	}
-	
-	@DeleteMapping("/resumes/{resumeId}/experience/{experienceId}")
-	public ResponseEntity<Object> removeExperience(@PathVariable Long resumeId, @PathVariable Long experienceId) {
-		try {
-			WorkExperience experience = experienceService.removeFromResume(resumeId, experienceId);
-			return new ResponseEntity<Object>(experience, HttpStatus.OK);
-		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex);
-			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-		}
-	}
 }

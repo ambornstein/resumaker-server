@@ -70,27 +70,4 @@ public class ProjectController {
 			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
 		}
 	}
-	
-	@PostMapping("/resumes/{resumeId}/projects/{projectId}")
-	public ResponseEntity<Object> addProject(@PathVariable Long resumeId, @PathVariable Long projectId) {
-		try {
-			Project project = projectService.assignToResume(resumeId, projectId);
-			
-			return new ResponseEntity<Object>(project, HttpStatus.OK);
-		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex);
-			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-		}
-	}
-	
-	@DeleteMapping("/resumes/{resumeId}/projects/{projectId}")
-	public ResponseEntity<Object> removeProject(@PathVariable Long resumeId, @PathVariable Long projectId) {
-		try {
-			Project project = projectService.removeFromResume(resumeId, projectId);
-			return new ResponseEntity<Object>(project, HttpStatus.OK);
-		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex);
-			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-		}
-	}
 }
