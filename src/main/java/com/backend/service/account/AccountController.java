@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ import com.backend.service.resume.Resume;
 import com.backend.service.resume.ResumeService;
 
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,10 +72,25 @@ public class AccountController {
 		}
 	}
 	
+	@PutMapping("/{id}")
+	public ResponseEntity<Object> updateAccount(@PathVariable Long id, @RequestBody Account account) {
+		try {
+			Account updatedAccount = accountService.updateById(id, account);
+			if (updatedAccount != null) {
+				return new ResponseEntity<Object>(updatedAccount, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@GetMapping("/{accountId}/resumes")
 	public ResponseEntity<Object> getResumes(@PathVariable Long accountId) {
 		try {
-			List<Resume> resumes = accountService.findAllResumesById(accountId);
+			Set<Resume> resumes = accountService.findAllResumesById(accountId);
 			if (resumes != null) {
 				return new ResponseEntity<Object>(resumes, HttpStatus.OK);
 			} else {

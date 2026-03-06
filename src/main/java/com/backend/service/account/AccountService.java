@@ -29,7 +29,7 @@ public class AccountService {
 		return accountRepository.findById(id).orElse(null);
 	}
 
-	public List<Resume> findAllResumesById(Long id) {
+	public Set<Resume> findAllResumesById(Long id) {
 		return accountRepository.findById(id).get().getResumes();
 	}
 	
@@ -37,6 +37,24 @@ public class AccountService {
 		accountRepository.deleteById(id);
 	}
 
+	public Account updateById(Long id, Account account) {
+		Account existingAccount = findById(id);
+		if (existingAccount != null) {
+			existingAccount.setFirstName(account.getFirstName());
+			existingAccount.setLastName(account.getLastName());
+			existingAccount.setEmail(account.getEmail());
+			existingAccount.setPhoneNumber(account.getPhoneNumber());
+			existingAccount.setLocation(account.getLocation());
+			existingAccount.setLinkedInLink(account.getLinkedInLink());
+			existingAccount.setGithubLink(account.getGithubLink());
+			existingAccount.setUSCitizen(account.getUSCitizen());
+			existingAccount.setWebsite(account.getWebsite());
+
+			return save(existingAccount);
+		}
+		return null;
+	}
+	
 	public Account addResume(Long accountId, Resume resume) {
 		Account account = findById(accountId);
 		if (account != null) {
@@ -92,7 +110,7 @@ public class AccountService {
 	public Set<WorkExperience> getWorkExperiencesById(Long accountId) {
 		Account account = findById(accountId);
 		if (account != null) {
-			return (Set<WorkExperience>) account.getWorkExperiences();
+			return account.getWorkExperiences();
 		}
 		return null;
 	}
@@ -122,7 +140,7 @@ public class AccountService {
 	public Set<Education> getEducationById(Long accountId) {
 		Account account = findById(accountId);
 		if (account != null) {
-			return (Set<Education>) account.getEducationEntries();
+			return account.getEducationEntries();
 		}
 		return null;
 	}
@@ -152,7 +170,7 @@ public class AccountService {
 	public Set<Project> getProjectsById(Long accountId) {
 		Account account = findById(accountId);
 		if (account != null) {
-			return (Set<Project>) account.getProjects();
+			return account.getProjects();
 		}
 		return null;
 	}

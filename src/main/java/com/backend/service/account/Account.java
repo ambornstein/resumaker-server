@@ -8,8 +8,10 @@ import com.backend.service.resume.components.education.Education;
 import com.backend.service.resume.components.experience.WorkExperience;
 import com.backend.service.resume.components.project.Project;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,10 +29,24 @@ public class Account {
 	private String firstName;
 
 	private String lastName;
+	
+	private String location;
+	
+	private boolean USCitizen;
+	
+	private String email;
+	
+	private String phoneNumber;
+	
+	private String website;
+	
+	private String linkedInLink;
+	
+	private String githubLink;
 
 	@OneToMany(mappedBy = "account")
 	@JsonManagedReference
-	private List<Resume> resumes;
+	private Set<Resume> resumes;
 
 	@OneToMany
 	private Set<WorkExperience> workExperiences;
@@ -61,7 +77,62 @@ public class Account {
 		this.lastName = lastName;
 	}
 	
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public boolean getUSCitizen() {
+		return USCitizen;
+	}
+
+	public void setUSCitizen(boolean isUSCitizen) {
+		this.USCitizen = isUSCitizen;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getWebsite() {
+		return website;
+	}
+
+	public void setWebsite(String website) {
+		this.website = website;
+	}
+
+	public String getLinkedInLink() {
+		return linkedInLink;
+	}
+
+	public void setLinkedInLink(String linkedInLink) {
+		this.linkedInLink = linkedInLink;
+	}
 	
+	public String getGithubLink() {
+		return githubLink;
+	}
+
+	public void setGithubLink(String githubLink) {
+		this.githubLink = githubLink;
+	}
+
 	public void addResume(Resume resume) {
 		resumes.add(resume);
 		resume.setAccount(this);
@@ -72,7 +143,7 @@ public class Account {
 		resume.setAccount(null);
 	}
 	
-	public List<Resume> getResumes() {
+	public Set<Resume> getResumes() {
 		return resumes;
 	}
 	
@@ -116,8 +187,9 @@ public class Account {
 	}
 
 	public Account(String firstName, String lastName) {
-		this.setFirstName(firstName);
-		this.setLastName(lastName);
+		setFirstName(firstName);
+		setLastName(lastName);
+		setUSCitizen(false);
 	}
 
 }
