@@ -28,6 +28,7 @@ public class WorkExperienceService {
 			existingExperience.bulletPoints = experience.bulletPoints;
 			existingExperience.startDate = experience.startDate;
 			existingExperience.endDate = experience.endDate;
+			existingExperience.location = experience.location;
 
 			return save(existingExperience);
 		}

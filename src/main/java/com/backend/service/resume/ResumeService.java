@@ -6,6 +6,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.backend.service.account.Account;
 import com.backend.service.account.AccountService;
 import com.backend.service.resume.components.education.Education;
 import com.backend.service.resume.components.education.EducationService;
@@ -46,6 +47,17 @@ public class ResumeService {
 	
 	public void deleteById(Long id) {
 		resumeRepository.deleteById(id);
+	}
+	
+	public Resume updateById(Long id, Resume resume) {
+		Resume existingResume = findById(id);
+		if (existingResume != null) {
+			existingResume.setLabel(resume.getLabel());
+			existingResume.setSkills(resume.getSkills());
+			
+			return save(existingResume);
+		}
+		return null;
 	}
 	
 	public Resume updateLinkedEducation(Long resumeId, Set<Long> educationIds) {

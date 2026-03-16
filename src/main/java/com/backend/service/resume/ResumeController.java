@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,6 +60,21 @@ public class ResumeController {
 			Resume resume = resumeService.findById(id);
 			if (resume != null) {
 				return new ResponseEntity<Object>(resume, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<Object> updateResume(@PathVariable Long id, @RequestBody Resume resume) {
+		try {
+			Resume updatedResume = resumeService.updateById(id, resume);
+			if (resume != null) {
+				return new ResponseEntity<Object>(updatedResume, HttpStatus.OK);
 			} else {
 				return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
 			}

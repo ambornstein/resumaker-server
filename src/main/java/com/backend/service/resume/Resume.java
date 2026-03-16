@@ -1,15 +1,20 @@
 package com.backend.service.resume;
 
+import java.util.Map;
 import java.util.Set;
 
 import com.backend.service.account.Account;
+import com.backend.service.resume.components.JSONConverter;
 import com.backend.service.resume.components.education.Education;
 import com.backend.service.resume.components.experience.WorkExperience;
 import com.backend.service.resume.components.project.Project;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -30,17 +35,21 @@ public class Resume {
 
 	@ManyToMany(mappedBy = "resumes")
 	private Set<WorkExperience> workHistory;
-	
+
 	@ManyToMany(mappedBy = "resumes")
 	private Set<Education> educationHistory;
 
 	@ManyToMany(mappedBy = "resumes")
 	private Set<Project> projects;
-	
+
 	@ManyToOne
 	@JsonBackReference
-	@JoinColumn(name="account_id")
+	@JoinColumn(name = "account_id")
 	private Account account;
+
+	@Convert(converter = JSONConverter.class)
+	private Map<String, Object> skills;
+
 	
 	public Long getId() {
 		return id;
@@ -53,7 +62,7 @@ public class Resume {
 	public void setLabel(String label) {
 		this.label = label;
 	}
-	
+
 	public Set<WorkExperience> getWorkHistory() {
 		return workHistory;
 	}
@@ -61,7 +70,7 @@ public class Resume {
 	public void addWorkExperience(WorkExperience workExperience) {
 		workHistory.add(workExperience);
 	}
-	
+
 	public void removeWorkExperience(WorkExperience workExperience) {
 		workHistory.remove(workExperience);
 	}
@@ -73,7 +82,7 @@ public class Resume {
 	public void addEducation(Education education) {
 		educationHistory.add(education);
 	}
-	
+
 	public void removeEducation(Education education) {
 		educationHistory.remove(education);
 	}
@@ -85,23 +94,32 @@ public class Resume {
 	public void addProject(Project project) {
 		projects.add(project);
 	}
-	
+
 	public void removeProject(Project project) {
 		projects.remove(project);
 	}
-	
+
 	public void setAccount(Account account) {
 		this.account = account;
 	}
-	
+
 	public Account getAccount() {
 		return account;
 	}
-	
+
+	public Map<String, Object> getSkills() {
+		return skills;
+	}
+
+	public void setSkills(Map<String, Object> skills) {
+		this.skills = skills;
+	}
+
 	public Resume() {
 	}
 
 	public Resume(String label) {
 		this.setLabel(label);
 	}
+
 }

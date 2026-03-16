@@ -26,6 +26,9 @@ public class WorkExperience {
 	
 	String company;
 	
+	String location;
+	
+	
 	String startDate;
 	
 	@Column(nullable = true)
@@ -53,6 +56,15 @@ public class WorkExperience {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
 
 	public String getCompany() {
 		return company;
